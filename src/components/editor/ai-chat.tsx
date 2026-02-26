@@ -33,13 +33,15 @@ interface AiChatProps {
   currentCode?: string;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
 export function AiChat({ onCodeGenerate, currentCode }: AiChatProps) {
   const t = useTranslations();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       type: 'ai',
-      content: 'Hello! I\'m your AI coding assistant. I can help you generate code, fix bugs, optimize performance, and answer questions about your project. What would you like to work on?',
+      content: 'Hello! I\'m your AI coding assistant powered by Claude. I can help you generate code, fix bugs, optimize performance, and answer questions about your project. What would you like to work on?',
       timestamp: new Date(),
     },
   ]);
@@ -54,27 +56,103 @@ export function AiChat({ onCodeGenerate, currentCode }: AiChatProps) {
       icon: Code,
       label: 'Generate Component',
       prompt: 'Create a React component with TypeScript',
+      type: 'generate',
     },
     {
       icon: Bug,
       label: 'Fix Bug',
       prompt: 'Help me debug this code and fix any issues',
+      type: 'chat',
     },
     {
       icon: Lightbulb,
       label: 'Optimize Code',
       prompt: 'Optimize this code for better performance',
+      type: 'modify',
     },
     {
       icon: Zap,
       label: 'Refactor',
       prompt: 'Refactor this code to follow best practices',
+      type: 'modify',
     },
   ];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const getAuthToken = () => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('wikicode_token');
+    }
+    return null;
+  };
+
+  const callAIChat = async (message: string, context?: string) => {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/api/ai/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ message, context }),
+    });
+
+    if (!response.ok) {
+      throw new Error('AI service unavailable');
+    }
+
+    return response.json();
+  };
+
+  const callAIGenerate = async (prompt: string) => {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/api/ai/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+      throw new Error('AI service unavailable');
+    }
+
+    return response.json();
+  };
+
+  const callAIModify = async (code: string, instruction: string) => {
+    const token = getAuthToken();
+    const response = await fetch(`${API_BASE_URL}/api/ai/modify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ code, instruction }),
+    });
+
+    if (!response.ok) {
+      throw new Error('AI service unavailable');
+    }
+
+    return response.json();
+  };
+
+  const extractCodeFromResponse = (text: string): { content: string; codeBlock?: string } => {
+    // Try to extract code blocks from markdown
+    const codeBlockMatch = text.match(/```[\w]*\n([\s\S]*?)```/);
+    if (codeBlockMatch) {
+      const codeBlock = codeBlockMatch[1].trim();
+      const content = text.replace(/```[\w]*\n[\s\S]*?```/g, '[Code generated - see below]').trim();
+      return { content, codeBlock };
+    }
+    return { content: text };
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -87,43 +165,76 @@ export function AiChat({ onCodeGenerate, currentCode }: AiChatProps) {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Determine if this is a code generation request
+      const isGenerateRequest = currentInput.toLowerCase().includes('create') || 
+                                currentInput.toLowerCase().includes('generate') ||
+                                currentInput.toLowerCase().includes('make') ||
+                                currentInput.toLowerCase().includes('build');
+      
+      const isModifyRequest = currentCode && (
+        currentInput.toLowerCase().includes('modify') ||
+        currentInput.toLowerCase().includes('change') ||
+        currentInput.toLowerCase().includes('fix') ||
+        currentInput.toLowerCase().includes('update') ||
+        currentInput.toLowerCase().includes('refactor') ||
+        currentInput.toLowerCase().includes('optimize')
+      );
+
+      let aiContent = '';
+      let codeBlock: string | undefined;
+
+      if (isGenerateRequest) {
+        // Use generate endpoint
+        const result = await callAIGenerate(currentInput);
+        aiContent = result.description || 'Here\'s the generated code:';
+        codeBlock = result.code;
+      } else if (isModifyRequest && currentCode) {
+        // Use modify endpoint
+        const result = await callAIModify(currentCode, currentInput);
+        aiContent = result.description || 'Here\'s the modified code:';
+        codeBlock = result.code;
+      } else {
+        // Use chat endpoint for general questions
+        const result = await callAIChat(currentInput, currentCode);
+        const extracted = extractCodeFromResponse(result.response);
+        aiContent = extracted.content;
+        codeBlock = extracted.codeBlock;
+      }
+
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
-        content: `I understand you want to ${input.toLowerCase()}. Here's a solution:`,
+        content: aiContent,
         timestamp: new Date(),
-        codeBlock: `// Generated code based on your request
-function ExampleComponent() {
-  const [state, setState] = useState(null);
-  
-  useEffect(() => {
-    // Implementation logic here
-    console.log('Component mounted');
-  }, []);
-  
-  return (
-    <div className="component">
-      <h2>Example Component</h2>
-      <p>This is generated code based on your request.</p>
-    </div>
-  );
-}
-
-export default ExampleComponent;`,
+        codeBlock,
       };
       
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      // Fallback response on error
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'ai',
+        content: 'I apologize, but I\'m having trouble connecting to the AI service right now. Please try again in a moment, or check if you\'re logged in.',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
-  const handleQuickAction = (prompt: string) => {
-    setInput(prompt);
+  const handleQuickAction = (action: typeof quickActions[0]) => {
+    if (action.type === 'modify' && currentCode) {
+      setInput(`${action.prompt}: \n\`\`\`\n${currentCode.substring(0, 500)}${currentCode.length > 500 ? '...' : ''}\n\`\`\``);
+    } else {
+      setInput(action.prompt);
+    }
     inputRef.current?.focus();
   };
 
@@ -150,7 +261,7 @@ export default ExampleComponent;`,
           <h3 className="font-semibold text-white">AI Assistant</h3>
           <Badge variant="secondary" className="text-xs">
             <Sparkles className="mr-1 h-3 w-3" />
-            GPT-4
+            Claude
           </Badge>
         </div>
       </div>
@@ -164,7 +275,7 @@ export default ExampleComponent;`,
               variant="outline"
               size="sm"
               className="flex items-center justify-start space-x-2 text-xs h-8"
-              onClick={() => handleQuickAction(action.prompt)}
+              onClick={() => handleQuickAction(action)}
             >
               <action.icon className="h-3 w-3" />
               <span>{action.label}</span>
@@ -195,7 +306,7 @@ export default ExampleComponent;`,
                   : 'bg-gray-800 text-gray-100'
               }`}
             >
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               
               {message.codeBlock && (
                 <div className="mt-3">
@@ -277,7 +388,7 @@ export default ExampleComponent;`,
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Ask me anything about your code..."
             className="flex-1"
           />
@@ -291,7 +402,7 @@ export default ExampleComponent;`,
         </div>
         
         <p className="text-xs text-gray-400 mt-2">
-          AI can make mistakes. Always review generated code.
+          Powered by Claude AI. Always review generated code.
         </p>
       </div>
     </div>
