@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import '../globals.css';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import { i18n } from '@/lib/i18n';
+import { i18n } from '@/i18n/request';
 
 const inter = Inter({ 
   subsets: ['latin'],
