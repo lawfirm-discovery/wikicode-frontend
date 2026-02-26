@@ -1,0 +1,88 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "edit": "編集",
+    "delete": "削除",
+    "search": "検索...",
+    "filter": "フィルター",
+    "all": "すべて",
+    "new": "新規作成",
+    "create": "作成"
+  },
+  "landing": {
+    "hero": {
+      "title": "一緒に作ろう。一緒に稼ごう。",
+      "subtitle": "開発者が協力してプロジェクトを作成、共有、収益化するコラボレーティブコーディングプラットフォーム",
+      "cta": {
+        "start": "開発を始める",
+        "explore": "プロジェクトを探す"
+      }
+    },
+    "features": {
+      "title": "アプリのためのYouTube",
+      "subtitle": "コーディングと収益の新しい方法",
+      "collaborative": {
+        "title": "コラボレーティブコーディング",
+        "description": "世界中の開発者と意味のあるプロジェクトを一緒に作ろう"
+      },
+      "revenue": {
+        "title": "収益分配",
+        "description": "あなたの貢献度に基づいて報酬を獲得"
+      },
+      "ai": {
+        "title": "AI駆動",
+        "description": "AIを活用してコーディング生産性と創造性を向上"
+      }
+    }
+  },
+  "projects": {
+    "title": "プロジェクト",
+    "subtitle": "貢献できる素晴らしいプロジェクトを発見",
+    "categories": {
+      "web": "ウェブ",
+      "mobile": "モバイル",
+      "desktop": "デスクトップ",
+      "api": "API"
+    },
+    "contributors": "貢献者",
+    "revenue": "収益",
+    "contribute": "貢献する",
+    "view": "プロジェクトを見る"
+  },
+  "editor": {
+    "files": "ファイル",
+    "terminal": "ターミナル",
+    "preview": "プレビュー",
+    "ai_chat": "AIアシスタント",
+    "generate": "コード生成",
+    "modify": "コード修正"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "myProjects": "マイプロジェクト",
+    "contributions": "貢献度",
+    "earnings": "収益",
+    "activity": "最近の活動"
+  },
+  "auth": {
+    "login": "サインイン",
+    "register": "サインアップ",
+    "email": "メール",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "githubLogin": "GitHubで続行",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "noAccount": "アカウントをお持ちでない？",
+    "hasAccount": "すでにアカウントをお持ちですか？"
+  },
+  "settings": {
+    "title": "設定",
+    "profile": "プロファイル",
+    "billing": "請求",
+    "notifications": "通知",
+    "language": "言語"
+  }
+}

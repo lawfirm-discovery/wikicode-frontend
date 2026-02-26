@@ -1,0 +1,88 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search...",
+    "filter": "Filter",
+    "all": "All",
+    "new": "New",
+    "create": "Create"
+  },
+  "landing": {
+    "hero": {
+      "title": "Build Together. Earn Together.",
+      "subtitle": "The collaborative coding platform where developers create, share, and monetize projects together",
+      "cta": {
+        "start": "Start Building",
+        "explore": "Explore Projects"
+      }
+    },
+    "features": {
+      "title": "YouTube for Apps",
+      "subtitle": "Transform how you code and earn",
+      "collaborative": {
+        "title": "Collaborative Coding",
+        "description": "Work together with developers worldwide on meaningful projects"
+      },
+      "revenue": {
+        "title": "Revenue Sharing",
+        "description": "Get paid for your contributions based on your impact"
+      },
+      "ai": {
+        "title": "AI-Powered",
+        "description": "Leverage AI to boost your coding productivity and creativity"
+      }
+    }
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Discover amazing projects to contribute to",
+    "categories": {
+      "web": "Web",
+      "mobile": "Mobile", 
+      "desktop": "Desktop",
+      "api": "API"
+    },
+    "contributors": "Contributors",
+    "revenue": "Revenue",
+    "contribute": "Contribute",
+    "view": "View Project"
+  },
+  "editor": {
+    "files": "Files",
+    "terminal": "Terminal",
+    "preview": "Preview",
+    "ai_chat": "AI Assistant",
+    "generate": "Generate Code",
+    "modify": "Modify Code"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myProjects": "My Projects",
+    "contributions": "Contributions",
+    "earnings": "Earnings",
+    "activity": "Recent Activity"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "githubLogin": "Continue with GitHub",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "language": "Language"
+  }
+}

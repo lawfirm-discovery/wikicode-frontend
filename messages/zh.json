@@ -1,0 +1,88 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "delete": "删除",
+    "search": "搜索...",
+    "filter": "筛选",
+    "all": "全部",
+    "new": "新建",
+    "create": "创建"
+  },
+  "landing": {
+    "hero": {
+      "title": "一起构建。一起赚钱。",
+      "subtitle": "开发者协作编码平台，共同创建、分享和变现项目",
+      "cta": {
+        "start": "开始构建",
+        "explore": "探索项目"
+      }
+    },
+    "features": {
+      "title": "应用界的YouTube",
+      "subtitle": "改变编程和盈利方式",
+      "collaborative": {
+        "title": "协作编程",
+        "description": "与全球开发者一起创建有意义的项目"
+      },
+      "revenue": {
+        "title": "收益分成",
+        "description": "基于贡献度获得相应回报"
+      },
+      "ai": {
+        "title": "AI驱动",
+        "description": "利用AI提升编程生产力和创造力"
+      }
+    }
+  },
+  "projects": {
+    "title": "项目",
+    "subtitle": "发现可以贡献的优秀项目",
+    "categories": {
+      "web": "网页",
+      "mobile": "移动端",
+      "desktop": "桌面端",
+      "api": "API"
+    },
+    "contributors": "贡献者",
+    "revenue": "收益",
+    "contribute": "贡献",
+    "view": "查看项目"
+  },
+  "editor": {
+    "files": "文件",
+    "terminal": "终端",
+    "preview": "预览",
+    "ai_chat": "AI助手",
+    "generate": "生成代码",
+    "modify": "修改代码"
+  },
+  "dashboard": {
+    "title": "仪表盘",
+    "myProjects": "我的项目",
+    "contributions": "贡献度",
+    "earnings": "收益",
+    "activity": "最近活动"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "githubLogin": "使用GitHub继续",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "没有账户？",
+    "hasAccount": "已有账户？"
+  },
+  "settings": {
+    "title": "设置",
+    "profile": "个人资料",
+    "billing": "账单",
+    "notifications": "通知",
+    "language": "语言"
+  }
+}
